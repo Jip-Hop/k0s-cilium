@@ -11,8 +11,7 @@ export COMPOSE_FILE=compose.common.yaml:compose.dev.yaml
 # Show the results of the merged compose files:
 docker compose config
 
-# Run in background as the --watch option can't be combined with detached mode
-docker compose up --watch &>/dev/null &
+docker compose up -d
 
 trap 'echo "Cleanup test cluster..." && docker compose down --volumes && rm -f "$KUBECONFIG"' EXIT
 
