@@ -2,6 +2,6 @@
 set -euo pipefail
 
 (
-    echo "$(date) - About to reboot..."
-    reboot
-) &>/var/log/restart.log
+    echo 'About to restart...'
+    pkill -f '^k0s controller --single'
+) &>/proc/1/fd/1

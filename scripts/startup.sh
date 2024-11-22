@@ -25,7 +25,9 @@ inotifyd /mnt/scripts/apply_default_cert.sh /run/secrets/tls:c &
 # and restart k0s with the new config applied
 inotifyd /mnt/scripts/restart.sh /mnt/config:c &
 
-k0s controller --disable-components metrics-server \
-    --config=/mnt/config/k0s_config.yaml \
-    --single \
-    --debug=true
+while :; do
+    k0s controller --single \
+        --disable-components metrics-server \
+        --config=/mnt/config/k0s_config.yaml \
+        --debug=true || break
+done
