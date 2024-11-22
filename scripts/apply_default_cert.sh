@@ -2,7 +2,7 @@
 set -euo pipefail
 umask 077
 
-(
+{
     echo 'About to crete new secret!'
 
     k0s kubectl create -n gateway-infra secret tls default-cert \
@@ -12,4 +12,4 @@ umask 077
         -oyaml >/var/lib/k0s/manifests/tls/default-cert.yaml
 
     echo 'Done creating new secret!'
-) &>/proc/1/fd/1
+} &>/proc/1/fd/1

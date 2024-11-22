@@ -2,7 +2,12 @@ services:
   k0s:
     container_name: k0s
     image: docker.io/k0sproject/k0s:v1.31.2-k0s.0
-    command: /mnt/scripts/startup.sh
+    command: |
+      /mnt/scripts/startup.sh k0s controller
+        --single
+        --disable-components=metrics-server
+        --config=/mnt/config/k0s_config.yaml
+        --debug=true
     hostname: k0s
     privileged: true
     security_opt:
