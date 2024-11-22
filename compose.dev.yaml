@@ -1,0 +1,21 @@
+services:
+  k0s:
+    container_name: k0s-development
+    hostname: k0s-development
+    # Bind to different local IP address
+    ports:
+      - 127.0.0.1:80:8080
+      - 127.0.0.1:443:8443
+      - 127.0.0.1:7443:6443
+    build:
+      context: .
+    # Restart the stack when changes to the config file are detected,
+    # to enter the k0s bootstrap phase so helm charts will be (re)deployed
+    develop:
+      watch:
+        - action: sync+restart
+          # Use x-initialSync, otherwise there's no config file and k0s can't start
+          # https://github.com/docker/compose/issues/11102
+          x-initialSync: true
+          path: ./config
+          target: /mnt/config

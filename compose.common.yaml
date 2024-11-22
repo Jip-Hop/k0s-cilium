@@ -1,0 +1,24 @@
+services:
+  k0s:
+    container_name: k0s
+    image: docker.io/k0sproject/k0s:v1.31.2-k0s.0
+    command: /mnt/scripts/startup.sh
+    hostname: k0s
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    cgroup: host
+    volumes:
+      - /var/lib/k0s
+      - /lib/modules:/lib/modules:ro
+      - ./scripts:/mnt/scripts:ro
+      # Mount charts in rw mode, as helm may write Chart.lock and .tgz files
+      - ./charts:/mnt/charts
+      - ./tls:/run/secrets/tls:ro
+    tmpfs:
+      - /run
+      - /var/run
+      - /var/lib/k0s/manifests/tls:mode=600
+    network_mode: "bridge"
+    restart: no

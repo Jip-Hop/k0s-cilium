@@ -1,0 +1,41 @@
+cilium:
+  kubeProxyReplacement: true
+  k8sServiceHost: localhost
+  k8sServicePort: 6443
+  gatewayAPI:
+    enabled: true
+    hostNetwork:
+      enabled: true
+  # Uncomment to allow binding on privileged ports,
+  # e.g. when running the k0s container directly on the host network
+  # We don't need it as we use docker port forwarding to bind to 80 and 443
+  # envoy:
+  #   securityContext:
+  #     capabilities:
+  #       keepCapNetBindService: true
+  cgroup:
+    autoMount:
+      enabled: false
+    hostRoot: /sys/fs/cgroup
+  operator:
+    replicas: 1
+  routingMode: native
+  ipam:
+    operator:
+      clusterPoolIPv4PodCIDRList:
+        - 10.42.0.0/16
+  ipv4NativeRoutingCIDR: 10.42.0.0/16
+  ipv4:
+    enabled: true
+  bpf:
+    tproxy: true
+    # These 2 need to be used together for time being:
+    # Else bpf.masquerade=true breaks the gateway api
+    # See https://github.com/cilium/cilium/issues/30510
+    # See https://github.com/cilium/cilium/issues/20942
+    # --set bpf.masquerade=true \
+    # --set bpf.hostLegacyRouting=true \
+    # Seems fixed since 1.16.4
+    masquerade: true
+  l2NeighDiscovery.enabled: false
+  hubble.enabled: false

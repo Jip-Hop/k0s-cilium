@@ -1,0 +1,36 @@
+apiVersion: k0s.k0sproject.io/v1beta1
+kind: ClusterConfig
+metadata:
+  name: k0s
+spec:
+  telemetry:
+    enabled: false
+  network:
+    kubeProxy:
+      disabled: true
+    provider: custom
+  api:
+    sans:
+      - localhost
+  extensions:
+    helm:
+      charts:
+        - name: gateway-api
+          chartname: /mnt/charts/gateway-api
+          order: 0
+          namespace: default
+        - name: cilium
+          chartname: /mnt/charts/cilium
+          version: 0.0.1
+          order: 1
+          namespace: kube-system
+        - name: gateway-infra
+          chartname: /mnt/charts/gateway-infra
+          version: 0.0.1
+          order: 2
+          namespace: gateway-infra
+        - name: echo-example
+          chartname: /mnt/charts/echo-example
+          version: 0.0.1
+          order: 3
+          namespace: default
