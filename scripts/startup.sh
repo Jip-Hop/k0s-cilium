@@ -14,7 +14,16 @@ mount --make-rshared /
 #     mv gateway-api.tgz /tmp/charts/gateway-api.tgz
 # )
 
+# Listen for file modified changes in /run/secrets/tls
+# and re-apply the secret
+inotifyd /mnt/scripts/apply_default_cert.sh /run/secrets/tls:c &
+
+# Apply the default secret once at startup
 /mnt/scripts/apply_default_cert.sh
+
+# Listen for file modified changes in /mnt/config
+# and restart k0s with the new config applied
+inotifyd /mnt/scripts/restart.sh /mnt/config:c &
 
 k0s controller --disable-components metrics-server \
     --config=/mnt/config/k0s_config.yaml \

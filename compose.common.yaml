@@ -13,12 +13,14 @@ services:
       - /var/lib/k0s
       - /lib/modules:/lib/modules:ro
       - ./scripts:/mnt/scripts:ro
+      - ./config:/mnt/config:ro
       # Mount charts in rw mode, as helm may write Chart.lock and .tgz files
       - ./charts:/mnt/charts
       - ./tls:/run/secrets/tls:ro
+      - /etc/localtime:/etc/localtime:ro
     tmpfs:
       - /run
       - /var/run
       - /var/lib/k0s/manifests/tls:mode=600
     network_mode: "bridge"
-    restart: no
+    restart: unless-stopped
